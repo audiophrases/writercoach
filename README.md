@@ -29,8 +29,8 @@ A zero-budget blueprint for monitoring ESL writing practice while learners lever
 | Layer | Tooling (Free) | Purpose |
 | --- | --- | --- |
 | Frontend | [SvelteKit](https://kit.svelte.dev/) static export + [Tailwind](https://tailwindcss.com/) | Responsive dashboards and submission forms. Built to run entirely in the browser with offline caching. |
-| Hosting | [Cloudflare Pages](https://pages.cloudflare.com/) or [Netlify](https://www.netlify.com/) free tier | Hosts the static frontend and serverless submission hooks. |
-| Auth & Database | [Supabase free tier](https://supabase.com/pricing) or [Firebase Firestore Spark](https://firebase.google.com/pricing) | Stores student metadata, submission summaries, and teacher comments. |
+| Hosting | [GitHub Pages](https://pages.github.com/) static hosting (primary) with optional [Cloudflare Pages](https://pages.cloudflare.com/) fallback | Serves the static dashboard bundle and exposes submission webhooks via GitHub Actions. |
+| Auth & Database | [Supabase free tier](https://supabase.com/pricing) | Stores student metadata, submission summaries, and teacher comments. |
 | File Storage | Supabase storage buckets, [Cloudflare R2 free](https://developers.cloudflare.com/r2/pricing/), or encrypted Google Drive folder shared with teacher | Holds uploaded drafts and transcripts. |
 | Automation | [n8n](https://n8n.io/) community edition (self-hosted) or GitHub Actions | Runs nightly analytics, reminder emails, and backups. |
 | Local Utilities | Template scripts (Python/Node) for students to format transcripts and compute word counts offline | Ensures consistency without requiring server compute. |
@@ -58,7 +58,8 @@ A zero-budget blueprint for monitoring ESL writing practice while learners lever
 
 ## Implementation Phases
 1. **Week 1 – Foundations**
-   - Scaffold SvelteKit project with Supabase auth integration.
+   - Scaffold SvelteKit project with Supabase auth integration (email magic link + row level security).
+   - Configure GitHub Pages deployment workflow (`svelte-kit sync`, `npm run build`, push to `gh-pages`).
    - Implement submission form accepting text upload + transcript text area.
    - Offline-first caching using service workers (PWA manifest).
 2. **Week 2 – Teacher Dashboard**
@@ -72,6 +73,38 @@ A zero-budget blueprint for monitoring ESL writing practice while learners lever
    - Package student onboarding kit (PDF + scripts) explaining how to use external LLMs safely.
    - Add teacher analytics exports and privacy controls.
    - Document backup strategy and manual recovery procedures.
+
+## GitHub Pages Deployment Workflow
+1. Enable GitHub Pages on the repository (Settings → Pages → "GitHub Actions").
+2. Add the official [SvelteKit Static Adapter](https://kit.svelte.dev/docs/adapter-static) and configure `paths.base` if hosting on a project subpath.
+3. Create `.github/workflows/deploy.yml` using the [`actions/deploy-pages`](https://github.com/actions/deploy-pages) action:
+   - Install dependencies, run `npm run build`, and upload the `build/` folder as an artifact.
+   - Deploy on pushes to `main` and optionally manual dispatch.
+4. Protect `main` with branch rules so only reviewed changes trigger deployments.
+5. For local preview, use `npm run preview` and verify offline caching before pushing.
+
+## Supabase Setup Checklist
+1. **Project & Auth**
+   - Create a new project in your Supabase account (Region closest to students).
+   - Enable Email magic link authentication; disable phone auth to stay within free tier.
+   - Define RLS policies on `students`, `submissions`, and `feedback` tables (students can read/write their own rows; teachers have elevated role via Supabase Dashboard).
+2. **Database Schema**
+   - Use SQL Editor → "New Query" to run the schema from the Data Model section.
+   - Seed demo data with the Supabase Table Editor for onboarding.
+3. **Storage Buckets**
+   - Create `drafts` and `transcripts` buckets; enable public read only for signed URLs that expire (e.g., 1 hour).
+   - Enforce file size limits using storage policies.
+4. **Edge Functions (Optional)**
+   - Deploy a `submission-intake` function to validate uploads and trigger LanguageTool checks.
+   - Schedule nightly summaries with Supabase Cron or GitHub Actions hitting the function endpoint.
+5. **Local Development**
+   - Pull the Supabase project config via `supabase link` and run `supabase start` for a local replica during development.
+   - Commit `.supabase` configuration safely (without secrets) and load environment variables via `.env.local`.
+
+## Integration Notes
+- Use GitHub Actions secrets for `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and service role keys. Reference them in deployment workflows and serverless scripts.
+- For client-side calls, rely on the anon key and enforce all writes through RLS-protected tables.
+- When exporting analytics to CSV, run a GitHub Action that queries Supabase using the service role key stored as an encrypted secret, then pushes reports to a private teacher-only branch or releases.
 
 ## Student Onboarding Kit (Deliverables)
 - **Quick-start guide:** Screenshots showing how to obtain prompts/feedback from popular free LLM portals and copy transcripts.
