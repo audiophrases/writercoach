@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WriterCoach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="logo">WriterCoach</div>
+        <nav class="site-nav">
+          <a href="#principles">Principles</a>
+          <a href="#student-experience">Students</a>
+          <a href="#teacher-experience">Teachers</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#data-model">Data</a>
+          <a href="#contact">Get Involved</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1>Guided writing growth without paid AI plans</h1>
+            <p>
+              WriterCoach captures the learning journey around any external LLM your
+              students choose. Monitor drafts, transcripts, and reflections while
+              they remain in control of their preferred writing tools.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#contact">Start exploring</a>
+              <a class="button secondary" href="#principles">See how it works</a>
+            </div>
+          </div>
+          <div class="hero-card">
+            <h2>Zero-budget monitoring toolkit</h2>
+            <ul>
+              <li>LLM-agnostic workflow</li>
+              <li>Privacy-first data practices</li>
+              <li>Offline-friendly student experience</li>
+              <li>Transparent progress dashboards</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="principles" class="split-section">
+        <div class="container">
+          <div class="split-content">
+            <h2>Guiding principles</h2>
+            <p>
+              Keep the writing journey learner-owned while surfacing the metrics
+              teachers need to personalize feedback. WriterCoach orchestrates the
+              supporting workflow without ever brokering paid AI access.
+            </p>
+          </div>
+          <div class="split-grid">
+            <article class="card">
+              <h3>LLM-agnostic</h3>
+              <p>
+                Students bring transcripts from any free or local LLM interface,
+                so classrooms stay adaptable as tools change.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Costless by design</h3>
+              <p>
+                Assemble the platform with open-source services and free tiers to
+                keep recurring fees at zero.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Learner owned</h3>
+              <p>
+                Drafts stay on the student’s device until they choose to upload
+                a submission package.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Transparency</h3>
+              <p>
+                Teachers see revision history, feedback artifacts, and student
+                reflections in a single view.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="student-experience" class="timeline">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Student experience</h2>
+            <p>Five simple steps keep learners focused on reflection and craft.</p>
+          </div>
+          <ol class="timeline-list">
+            <li>
+              <h3>Prompt intake</h3>
+              <p>
+                Access the weekly brief and borrow templates for asking any LLM
+                clarifying questions.
+              </p>
+            </li>
+            <li>
+              <h3>Local drafting</h3>
+              <p>
+                Compose in an offline editor while retaining the source files on
+                personal devices.
+              </p>
+            </li>
+            <li>
+              <h3>Feedback loop</h3>
+              <p>
+                Consult the LLM for grammar or style suggestions using guided
+                prompt templates.
+              </p>
+            </li>
+            <li>
+              <h3>Submission package</h3>
+              <p>
+                Upload the final draft, the LLM transcript, and a reflection
+                checklist via a structured form.
+              </p>
+            </li>
+            <li>
+              <h3>Progress snapshot</h3>
+              <p>
+                View dashboards summarizing milestones, word counts, and pending
+                teacher comments.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="teacher-experience" class="features">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Teacher experience</h2>
+            <p>
+              Dashboards and annotation tools translate student artifacts into
+              actionable insights.
+            </p>
+          </div>
+          <div class="features-grid">
+            <article class="card">
+              <h3>Class overview</h3>
+              <p>
+                Filterable tables surface streaks, CEFR targets, and recent
+                submissions in seconds.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Deep dive views</h3>
+              <p>
+                Inspect drafts alongside transcripts, automated grammar
+                summaries, and reflections.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Feedback tools</h3>
+              <p>
+                Annotate inline, attach rich media comments, and assign follow-up
+                tasks without leaving the browser.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Analytics exports</h3>
+              <p>
+                Download CSV summaries of error patterns and vocabulary goals for
+                departmental planning.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture" class="architecture">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Architecture overview</h2>
+            <p>
+              Free-tier friendly stack choices keep deployments lightweight and
+              portable.
+            </p>
+          </div>
+          <div class="architecture-grid">
+            <article class="stack-card">
+              <h3>Frontend</h3>
+              <p>SvelteKit static export + Tailwind for responsive dashboards.</p>
+            </article>
+            <article class="stack-card">
+              <h3>Hosting</h3>
+              <p>GitHub Pages with optional Cloudflare Pages fallback.</p>
+            </article>
+            <article class="stack-card">
+              <h3>Auth &amp; Database</h3>
+              <p>Supabase free tier with row-level security policies.</p>
+            </article>
+            <article class="stack-card">
+              <h3>File storage</h3>
+              <p>Supabase buckets or Cloudflare R2 for uploads and transcripts.</p>
+            </article>
+            <article class="stack-card">
+              <h3>Automation</h3>
+              <p>n8n community edition or GitHub Actions for workflows.</p>
+            </article>
+            <article class="stack-card">
+              <h3>Local utilities</h3>
+              <p>Student scripts to format transcripts and compute word counts.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="data-model" class="data-model">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Minimal data model</h2>
+            <p>
+              Tables focus on metadata and reflections—drafts remain student
+              controlled.
+            </p>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Table</th>
+                  <th>Key fields</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>students</td>
+                  <td>id, display_name, cefr_level, preferred_tools, guardian_contact</td>
+                  <td>Support pseudonyms and optional guardian links.</td>
+                </tr>
+                <tr>
+                  <td>assignments</td>
+                  <td>id, title, instructions, due_date, llm_prompt_templates</td>
+                  <td>Provide copy-ready prompt suggestions.</td>
+                </tr>
+                <tr>
+                  <td>submissions</td>
+                  <td>id, student_id, assignment_id, submitted_at, word_count, transcript_url, draft_url, self_reflection</td>
+                  <td>Store artifact links with lightweight metadata.</td>
+                </tr>
+                <tr>
+                  <td>feedback</td>
+                  <td>id, submission_id, author_role, comment_text, tags, created_at</td>
+                  <td>Enable teacher and peer discussion threads.</td>
+                </tr>
+                <tr>
+                  <td>metrics_daily</td>
+                  <td>student_id, date, minutes_spent, words_written, llm_used</td>
+                  <td>Optional streak tracking for coaching conversations.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="callout">
+        <div class="container">
+          <div class="callout-content">
+            <h2>Launch plan</h2>
+            <p>
+              Ship quickly in four weekly phases—from scaffolding the SvelteKit
+              project to polishing analytics and privacy controls.
+            </p>
+          </div>
+          <ol class="callout-list">
+            <li>
+              Foundations: auth setup, GitHub Pages workflow, submission form,
+              offline caching.
+            </li>
+            <li>
+              Teacher dashboard: class overview, submission timelines, streaks.
+            </li>
+            <li>
+              Feedback &amp; automation: annotations, LanguageTool, n8n reminders.
+            </li>
+            <li>
+              Polishing: onboarding kit, analytics exports, backups.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="callout secondary">
+        <div class="container">
+          <div class="callout-content">
+            <h2>Student onboarding kit</h2>
+            <p>
+              Equip learners with word-count scripts, reflection templates, and
+              ethics guidance for responsible AI use.
+            </p>
+          </div>
+          <ul class="callout-list bullets">
+            <li>Quick-start guide with LLM prompt examples.</li>
+            <li>Cross-platform CLI for transcript formatting.</li>
+            <li>Printable reflection checklist and web form.</li>
+            <li>Ethics module on evaluating AI feedback critically.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="security">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Security &amp; privacy</h2>
+            <p>
+              Respect student agency while protecting sensitive artifacts and
+              access credentials.
+            </p>
+          </div>
+          <div class="features-grid">
+            <article class="card">
+              <h3>Pseudonymous participation</h3>
+              <p>Students choose display names mapped offline to real identities.</p>
+            </article>
+            <article class="card">
+              <h3>Consent-driven sharing</h3>
+              <p>
+                Students decide which drafts to upload; signed URLs expire after
+                review.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Encrypted storage</h3>
+              <p>
+                Supabase buckets and R2 enforce encryption at rest with strict
+                access policies.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Data portability</h3>
+              <p>
+                Export everything to Markdown and CSV for archival or transfers.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <div class="container">
+          <div class="contact-card">
+            <h2>Ready to collaborate?</h2>
+            <p>
+              Join educators piloting WriterCoach or contribute to templates and
+              automation workflows.
+            </p>
+            <form>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" placeholder="Your name" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="you@example.com" />
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="4" placeholder="How would you like to help?"></textarea>
+              </div>
+              <button type="submit" class="button primary">Send interest</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="year"></span> WriterCoach. Built for ESL writing growth.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
