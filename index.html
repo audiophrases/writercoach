@@ -17,284 +17,150 @@
       <div class="container">
         <div class="logo">WriterCoach</div>
         <nav class="site-nav">
-          <a href="#principles">Principles</a>
-          <a href="#student-experience">Students</a>
-          <a href="#teacher-experience">Teachers</a>
-          <a href="#architecture">Architecture</a>
-          <a href="#data-model">Data</a>
-          <a href="#contact">Get Involved</a>
+          <a href="#overview">Overview</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#progress">Progress views</a>
+          <a href="#digest">LLM digest</a>
+          <a href="#roadmap">Roadmap</a>
+          <a href="#contact">Get involved</a>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="hero">
+      <section id="overview" class="hero">
         <div class="container">
           <div class="hero-content">
-            <h1>Guided writing growth without paid AI plans</h1>
+            <h1>One shared progress hub for writers, teachers, and LLM co-pilots</h1>
             <p>
-              WriterCoach captures the learning journey around any external LLM your
-              students choose. Monitor drafts, transcripts, and reflections while
-              they remain in control of their preferred writing tools.
+              WriterCoach runs as a static GitHub Pages site backed by Supabase so
+              everyone sees the same growth timeline. Students draft anywhere,
+              teachers respond in minutes, and helper LLMs adapt using secure
+              progress digests.
             </p>
             <div class="hero-actions">
               <a class="button primary" href="#contact">Start exploring</a>
-              <a class="button secondary" href="#principles">See how it works</a>
+              <a class="button secondary" href="#workflow">See the workflow</a>
             </div>
           </div>
           <div class="hero-card">
-            <h2>Zero-budget monitoring toolkit</h2>
+            <h2>Lean stack, full visibility</h2>
             <ul>
-              <li>LLM-agnostic workflow</li>
-              <li>Privacy-first data practices</li>
-              <li>Offline-friendly student experience</li>
-              <li>Transparent progress dashboards</li>
+              <li>GitHub Pages + Supabase only</li>
+              <li>Shared timelines for teachers &amp; students</li>
+              <li>Signed digests for adaptive LLM feedback</li>
+              <li>Row-level security without extra servers</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section id="principles" class="split-section">
+      <section id="workflow" class="split-section">
         <div class="container">
           <div class="split-content">
-            <h2>Guiding principles</h2>
+            <h2>Five-step learner workflow</h2>
             <p>
-              Keep the writing journey learner-owned while surfacing the metrics
-              teachers need to personalize feedback. WriterCoach orchestrates the
-              supporting workflow without ever brokering paid AI access.
+              Keep drafting tools flexible while centralizing evidence and
+              feedback. Supabase stores the official record so students, teachers,
+              and LLM co-pilots stay in sync.
             </p>
           </div>
           <div class="split-grid">
             <article class="card">
-              <h3>LLM-agnostic</h3>
+              <h3>Check the brief</h3>
               <p>
-                Students bring transcripts from any free or local LLM interface,
-                so classrooms stay adaptable as tools change.
+                Students sign in with Supabase magic links and review the weekly
+                assignment plus prompt starters for their preferred LLM.
               </p>
             </article>
             <article class="card">
-              <h3>Costless by design</h3>
+              <h3>Draft anywhere</h3>
               <p>
-                Assemble the platform with open-source services and free tiers to
-                keep recurring fees at zero.
+                Learners compose offline, in Docs, or on paper while logging time
+                spent and saving transcripts from any external model.
               </p>
             </article>
             <article class="card">
-              <h3>Learner owned</h3>
+              <h3>Upload evidence</h3>
               <p>
-                Drafts stay on the student’s device until they choose to upload
-                a submission package.
+                Final draft, transcript, and reflection land in Supabase storage
+                with automatic word counts and streak updates.
               </p>
             </article>
             <article class="card">
-              <h3>Transparency</h3>
+              <h3>Review together</h3>
               <p>
-                Teachers see revision history, feedback artifacts, and student
-                reflections in a single view.
+                Teacher feedback, rubric scores, and audio notes appear instantly
+                in the student timeline inside the GitHub Pages dashboard.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Share with an LLM</h3>
+              <p>
+                Students generate a signed digest link to paste into their LLM so
+                each coaching session starts with accurate context.
               </p>
             </article>
           </div>
         </div>
       </section>
 
-      <section id="student-experience" class="timeline">
+      <section id="progress" class="timeline">
         <div class="container">
           <div class="section-heading">
-            <h2>Student experience</h2>
-            <p>Five simple steps keep learners focused on reflection and craft.</p>
+            <h2>Shared progress views</h2>
+            <p>
+              Everyone sees the same evidence trail—students, teachers, and
+              guardians if invited.
+            </p>
           </div>
           <ol class="timeline-list">
             <li>
-              <h3>Prompt intake</h3>
+              <h3>Student timeline</h3>
               <p>
-                Access the weekly brief and borrow templates for asking any LLM
-                clarifying questions.
+                Visualize submissions, reflections, and streaks with toggles for
+                drafts, transcripts, and teacher responses.
               </p>
             </li>
             <li>
-              <h3>Local drafting</h3>
+              <h3>Teacher console</h3>
               <p>
-                Compose in an offline editor while retaining the source files on
-                personal devices.
+                Filterable class board highlights late work, target CEFR levels,
+                and open comments across all students.
               </p>
             </li>
             <li>
-              <h3>Feedback loop</h3>
+              <h3>Progress digest</h3>
               <p>
-                Consult the LLM for grammar or style suggestions using guided
-                prompt templates.
-              </p>
-            </li>
-            <li>
-              <h3>Submission package</h3>
-              <p>
-                Upload the final draft, the LLM transcript, and a reflection
-                checklist via a structured form.
-              </p>
-            </li>
-            <li>
-              <h3>Progress snapshot</h3>
-              <p>
-                View dashboards summarizing milestones, word counts, and pending
-                teacher comments.
+                Generate a Supabase-signed JSON summary so the next LLM session
+                adapts to current strengths and goals.
               </p>
             </li>
           </ol>
         </div>
       </section>
 
-      <section id="teacher-experience" class="features">
-        <div class="container">
-          <div class="section-heading">
-            <h2>Teacher experience</h2>
-            <p>
-              Dashboards and annotation tools translate student artifacts into
-              actionable insights.
-            </p>
-          </div>
-          <div class="features-grid">
-            <article class="card">
-              <h3>Class overview</h3>
-              <p>
-                Filterable tables surface streaks, CEFR targets, and recent
-                submissions in seconds.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Deep dive views</h3>
-              <p>
-                Inspect drafts alongside transcripts, automated grammar
-                summaries, and reflections.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Feedback tools</h3>
-              <p>
-                Annotate inline, attach rich media comments, and assign follow-up
-                tasks without leaving the browser.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Analytics exports</h3>
-              <p>
-                Download CSV summaries of error patterns and vocabulary goals for
-                departmental planning.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="architecture" class="architecture">
-        <div class="container">
-          <div class="section-heading">
-            <h2>Architecture overview</h2>
-            <p>
-              Free-tier friendly stack choices keep deployments lightweight and
-              portable.
-            </p>
-          </div>
-          <div class="architecture-grid">
-            <article class="stack-card">
-              <h3>Frontend</h3>
-              <p>SvelteKit static export + Tailwind for responsive dashboards.</p>
-            </article>
-            <article class="stack-card">
-              <h3>Hosting</h3>
-              <p>GitHub Pages with optional Cloudflare Pages fallback.</p>
-            </article>
-            <article class="stack-card">
-              <h3>Auth &amp; Database</h3>
-              <p>Supabase free tier with row-level security policies.</p>
-            </article>
-            <article class="stack-card">
-              <h3>File storage</h3>
-              <p>Supabase buckets or Cloudflare R2 for uploads and transcripts.</p>
-            </article>
-            <article class="stack-card">
-              <h3>Automation</h3>
-              <p>n8n community edition or GitHub Actions for workflows.</p>
-            </article>
-            <article class="stack-card">
-              <h3>Local utilities</h3>
-              <p>Student scripts to format transcripts and compute word counts.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="data-model" class="data-model">
-        <div class="container">
-          <div class="section-heading">
-            <h2>Minimal data model</h2>
-            <p>
-              Tables focus on metadata and reflections—drafts remain student
-              controlled.
-            </p>
-          </div>
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Table</th>
-                  <th>Key fields</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>students</td>
-                  <td>id, display_name, cefr_level, preferred_tools, guardian_contact</td>
-                  <td>Support pseudonyms and optional guardian links.</td>
-                </tr>
-                <tr>
-                  <td>assignments</td>
-                  <td>id, title, instructions, due_date, llm_prompt_templates</td>
-                  <td>Provide copy-ready prompt suggestions.</td>
-                </tr>
-                <tr>
-                  <td>submissions</td>
-                  <td>id, student_id, assignment_id, submitted_at, word_count, transcript_url, draft_url, self_reflection</td>
-                  <td>Store artifact links with lightweight metadata.</td>
-                </tr>
-                <tr>
-                  <td>feedback</td>
-                  <td>id, submission_id, author_role, comment_text, tags, created_at</td>
-                  <td>Enable teacher and peer discussion threads.</td>
-                </tr>
-                <tr>
-                  <td>metrics_daily</td>
-                  <td>student_id, date, minutes_spent, words_written, llm_used</td>
-                  <td>Optional streak tracking for coaching conversations.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section class="callout">
+      <section id="digest" class="callout">
         <div class="container">
           <div class="callout-content">
-            <h2>Launch plan</h2>
+            <h2>LLM-ready digest in three safeguards</h2>
             <p>
-              Ship quickly in four weekly phases—from scaffolding the SvelteKit
-              project to polishing analytics and privacy controls.
+              Give language models just enough context to coach effectively
+              without sharing entire drafts by default.
             </p>
           </div>
           <ol class="callout-list">
             <li>
-              Foundations: auth setup, GitHub Pages workflow, submission form,
-              offline caching.
+              <strong>Edge function filter:</strong> <code>progress_digest</code>
+              returns goals, recurring issues, and next steps—not raw documents.
             </li>
             <li>
-              Teacher dashboard: class overview, submission timelines, streaks.
+              <strong>Expiring signature:</strong> Copy links expire within an
+              hour and can be revoked instantly from the dashboard.
             </li>
             <li>
-              Feedback &amp; automation: annotations, LanguageTool, n8n reminders.
-            </li>
-            <li>
-              Polishing: onboarding kit, analytics exports, backups.
+              <strong>Student control:</strong> Learners decide which metrics
+              appear in the digest before sharing with an LLM.
             </li>
           </ol>
         </div>
@@ -303,53 +169,49 @@
       <section class="callout secondary">
         <div class="container">
           <div class="callout-content">
-            <h2>Student onboarding kit</h2>
+            <h2>Stack essentials</h2>
             <p>
-              Equip learners with word-count scripts, reflection templates, and
-              ethics guidance for responsible AI use.
+              Everything runs on free tiers—deploy once and invite the class to
+              sign in.
             </p>
           </div>
           <ul class="callout-list bullets">
-            <li>Quick-start guide with LLM prompt examples.</li>
-            <li>Cross-platform CLI for transcript formatting.</li>
-            <li>Printable reflection checklist and web form.</li>
-            <li>Ethics module on evaluating AI feedback critically.</li>
+            <li>GitHub Pages hosts the static dashboard.</li>
+            <li>Supabase handles auth, database, and storage.</li>
+            <li>Row-level security keeps data scoped per user.</li>
+            <li>GitHub Actions cron pings Supabase for weekly summaries.</li>
           </ul>
         </div>
       </section>
 
-      <section class="security">
+      <section id="roadmap" class="security">
         <div class="container">
           <div class="section-heading">
-            <h2>Security &amp; privacy</h2>
-            <p>
-              Respect student agency while protecting sensitive artifacts and
-              access credentials.
-            </p>
+            <h2>Ten-day launch roadmap</h2>
+            <p>Deliver the full workflow quickly while keeping privacy intact.</p>
           </div>
           <div class="features-grid">
             <article class="card">
-              <h3>Pseudonymous participation</h3>
-              <p>Students choose display names mapped offline to real identities.</p>
+              <h3>Day 1</h3>
+              <p>Ship the SvelteKit shell to GitHub Pages and wire Supabase auth.</p>
             </article>
             <article class="card">
-              <h3>Consent-driven sharing</h3>
-              <p>
-                Students decide which drafts to upload; signed URLs expire after
-                review.
-              </p>
+              <h3>Day 3</h3>
+              <p>Enable submissions, storage uploads, and streak calculations.</p>
             </article>
             <article class="card">
-              <h3>Encrypted storage</h3>
-              <p>
-                Supabase buckets and R2 enforce encryption at rest with strict
-                access policies.
-              </p>
+              <h3>Day 5</h3>
+              <p>Build student timelines and teacher class dashboards from views.</p>
             </article>
             <article class="card">
-              <h3>Data portability</h3>
+              <h3>Day 7</h3>
+              <p>Add annotation tools, rubric entry, and quick feedback templates.</p>
+            </article>
+            <article class="card">
+              <h3>Day 10</h3>
               <p>
-                Export everything to Markdown and CSV for archival or transfers.
+                Launch the progress digest edge function and student-facing copy
+                flow.
               </p>
             </article>
           </div>
@@ -361,8 +223,8 @@
           <div class="contact-card">
             <h2>Ready to collaborate?</h2>
             <p>
-              Join educators piloting WriterCoach or contribute to templates and
-              automation workflows.
+              Join educators piloting WriterCoach or contribute to Supabase
+              schemas, UI components, and onboarding resources.
             </p>
             <form>
               <div class="form-group">
@@ -375,7 +237,11 @@
               </div>
               <div class="form-group">
                 <label for="message">Message</label>
-                <textarea id="message" rows="4" placeholder="How would you like to help?"></textarea>
+                <textarea
+                  id="message"
+                  rows="4"
+                  placeholder="How would you like to help?"
+                ></textarea>
               </div>
               <button type="submit" class="button primary">Send interest</button>
             </form>

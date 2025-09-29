@@ -1,128 +1,68 @@
 # WriterCoach
 
-A zero-budget blueprint for monitoring ESL writing practice while learners leverage any external LLM they prefer. The platform records drafts, feedback artifacts, and progression metrics, but never brokers or pays for model access.
+WriterCoach is a blueprint for a no-cost ESL writing coach that runs as a static GitHub Pages site backed by Supabase. Students, teachers, and even helper LLMs can review the same progress timeline without the platform ever brokering paid AI access.
 
-## Guiding Principles
-- **LLM-agnostic:** Students can pick any public or local LLM interface (ChatGPT free tier, Poe, Gemini, Ollama, etc.) to obtain prompts or feedback. The platform only references the instructions they followed.
-- **Costless by design:** Prefer open-source components, perpetual free tiers, and optional self-hosted services so neither teachers nor students incur recurring fees.
-- **Learner-owned workflow:** Drafting happens locally (browser, desktop editor, or paper). Students upload artifacts and reflections rather than typing into a hosted editor.
-- **Transparency for teachers:** Provide dashboards that surface attempt history, revisions, external prompts used, and teacher annotations.
-- **Privacy-first:** Minimize stored data, allow pseudonymous participation, and keep any sensitive drafts on the learner's device unless they choose to share.
+## Why the new workflow?
+- **Simpler hosting:** ship a static SvelteKit bundle to GitHub Pages and call Supabase directly for auth, database, and storage.
+- **Single source of truth:** Supabase tables store assignment status, reflections, and generated progress digests that everyone (student, teacher, or LLM) can reference.
+- **Low-friction adoption:** learners keep drafting in their preferred tools, upload evidence when ready, and instantly see how the teacher responded.
 
-## Student Experience
-1. **Prompt Intake:** The teacher shares a weekly exercise brief. Learners obtain detailed instructions or examples from an external LLM of their choice.
-2. **Local Drafting:** Students write offline (Google Docs offline mode, LibreOffice, Markdown editors). They retain original drafts locally.
-3. **Feedback Loop:** Learners may consult the LLM for feedback or grammar checks. The platform provides optional templates guiding how to ask the LLM (e.g., "List three grammar issues").
-4. **Submission Package:** When ready, students upload:
-   - Final draft (plain text or PDF extract).
-   - LLM prompt/response transcript (manual paste or exported `.txt`).
-   - Self-reflection checklist (structured form).
-5. **Progress Snapshot:** The dashboard visualizes milestones, word counts, revision notes, and highlights outstanding teacher comments.
-
-## Teacher Experience
-- **Class Overview:** Filterable table of students with latest submission date, CEFR targets, and progress streaks.
-- **Deep Dive:** For each submission, view uploaded draft, linked LLM transcript, automated grammar summary, and any peer/teacher comments.
-- **Feedback Tools:** Annotate drafts, attach audio/video notes, and schedule follow-up tasks.
-- **Analytics:** Export CSV summaries of error patterns, vocabulary goals, and completion rates without leaving the free tier.
-
-## Architecture Overview
-| Layer | Tooling (Free) | Purpose |
+## Shared progress at a glance
+| Audience | What they see | How they access it |
 | --- | --- | --- |
-| Frontend | [SvelteKit](https://kit.svelte.dev/) static export + [Tailwind](https://tailwindcss.com/) | Responsive dashboards and submission forms. Built to run entirely in the browser with offline caching. |
-| Hosting | [GitHub Pages](https://pages.github.com/) static hosting (primary) with optional [Cloudflare Pages](https://pages.cloudflare.com/) fallback | Serves the static dashboard bundle and exposes submission webhooks via GitHub Actions. |
-| Auth & Database | [Supabase free tier](https://supabase.com/pricing) | Stores student metadata, submission summaries, and teacher comments. |
-| File Storage | Supabase storage buckets, [Cloudflare R2 free](https://developers.cloudflare.com/r2/pricing/), or encrypted Google Drive folder shared with teacher | Holds uploaded drafts and transcripts. |
-| Automation | [n8n](https://n8n.io/) community edition (self-hosted) or GitHub Actions | Runs nightly analytics, reminder emails, and backups. |
-| Local Utilities | Template scripts (Python/Node) for students to format transcripts and compute word counts offline | Ensures consistency without requiring server compute. |
+| Student | Assignment list, submission streak, feedback queue, and LLM coaching tips. | Secure dashboard on GitHub Pages (Supabase magic-link auth). |
+| Teacher | Class leaderboard, individual timelines, transcript attachments, rubric scoring. | Same dashboard with elevated Supabase role. |
+| LLM co-pilot | Read-only digest of the student’s skill profile, latest goals, and open teacher comments. | Signed Supabase edge function URL exposed via copy button inside the dashboard. |
 
-### Why no hosted LLM?
-- Students already have free options (public web UIs, local inference) and can switch without affecting the teacher portal.
-- Avoids legal and cost concerns—only metadata about the external session is stored.
-- Encourages autonomy: learners compare outputs from multiple LLMs and reflect on differences.
+## Simplified learner workflow
+1. **Check the brief:** Student opens the GitHub Pages dashboard, signs in, and reads the week’s assignment plus suggested LLM prompt starters.
+2. **Draft anywhere:** Writing happens offline or in any editor. Students optionally query external LLMs and save the conversation transcript.
+3. **Upload evidence:** The dashboard form uploads the final draft, transcript, and self-reflection to Supabase storage, logging word count and time-on-task.
+4. **Review feedback:** Teacher annotations and rubric scores appear in the student’s timeline. Both parties can revisit the full history at any time.
+5. **Share with an LLM:** Student clicks “Generate progress digest,” copies the signed link, and pastes it into their preferred LLM so the model adapts to their goals during the next coaching session.
 
-## Data Model (Minimal)
-| Table | Key Fields | Notes |
+## Teacher workflow
+1. **Plan assignments:** Teachers create prompts, due dates, and rubric items directly in Supabase (SQL editor or simple admin UI).
+2. **Monitor submissions:** GitHub Pages dashboard pulls real-time data—late flags, streak counts, and error tags—from Supabase views.
+3. **Respond quickly:** Inline annotations, quick-reply templates, and audio notes are stored as `feedback` rows tied to each draft.
+4. **Spot trends:** A Supabase materialized view aggregates grammar issues and vocabulary goals, exportable as CSV for department meetings.
+5. **Coach with context:** Teachers can generate the same progress digest students share with LLMs, ensuring human and AI feedback stay aligned.
+
+## Progress digests for LLM adapters
+- **Supabase edge function `progress_digest`:** Accepts a submission ID or student ID and returns a condensed JSON snapshot (reading level, goals, recurring errors, last teacher comments).
+- **Rotating signatures:** Students trigger a one-hour signed URL that can be pasted into ChatGPT, Claude, or any other LLM so the model can tailor prompts.
+- **Privacy controls:** Digests exclude raw drafts by default and only surface metrics the student explicitly allows. Teachers can revoke a digest instantly by invalidating the signature.
+
+## Architecture (lean stack)
+| Layer | Tooling | Purpose |
 | --- | --- | --- |
-| `students` | `id`, `display_name`, `cefr_level`, `preferred_tools`, `guardian_contact` (optional) | Allow pseudonyms; link guardians only if necessary. |
-| `assignments` | `id`, `title`, `instructions`, `due_date`, `llm_prompt_templates` | Templates are plain text suggestions for students to copy. |
-| `submissions` | `id`, `student_id`, `assignment_id`, `submitted_at`, `word_count`, `transcript_url`, `draft_url`, `self_reflection` (JSON) | File URLs point to free storage with access rules. |
-| `feedback` | `id`, `submission_id`, `author_role`, `comment_text`, `tags`, `created_at` | Supports teacher or peer feedback. |
-| `metrics_daily` | `student_id`, `date`, `minutes_spent`, `words_written`, `llm_used` | Optional; populated via manual entry or CSV import. |
+| Frontend | SvelteKit static export hosted on GitHub Pages | Responsive dashboards, forms, and digest copy actions. |
+| Auth & Database | Supabase (auth, Postgres, row-level security) | Handles users, assignments, submissions, feedback, and progress digests. |
+| Storage | Supabase storage buckets | Holds uploaded drafts, transcripts, and audio notes with signed URL access. |
+| Edge Functions | Supabase Functions | Generate digests, validate uploads, compute reading levels, and sync streak metrics nightly. |
+| Automation | GitHub Actions cron hitting Supabase function | Sends weekly summaries and refreshes analytics without extra services. |
 
-## Workflow Automation
-1. **Submission Intake:** Serverless function validates file size (limit to keep within free storage), extracts plain text for analytics, and queues grammar analysis.
-2. **Grammar & Style Checks:** Run [LanguageTool](https://languagetool.org/dev) via self-hosted container or Supabase Edge Function. Results are cached per submission.
-3. **Progress Reports:** Weekly email (using [Resend free tier](https://resend.com/pricing) or [Brevo](https://www.brevo.com/pricing/free/)) summarizing completed assignments and common error types.
-4. **Teacher Notes:** Inline annotations stored as JSON (range start/end) to reconstruct highlights when rendering the draft.
-5. **Data Portability:** CLI script exports everything to Markdown/CSV for archival without vendor lock-in.
+## Data model essentials
+| Table | Key fields | Notes |
+| --- | --- | --- |
+| `students` | `id`, `display_name`, `cefr_level`, `goals`, `digest_opt_in` | Row Level Security ensures students only see their own data. |
+| `assignments` | `id`, `title`, `instructions`, `due_date`, `llm_prompt_templates` | Templates surface directly in the dashboard. |
+| `submissions` | `id`, `student_id`, `assignment_id`, `submitted_at`, `word_count`, `draft_url`, `transcript_url`, `reflection`, `time_spent_minutes` | Uploads go to Supabase storage with automatic virus scanning. |
+| `feedback` | `id`, `submission_id`, `author_role`, `comment`, `rubric_scores`, `audio_note_url`, `created_at` | Supports teacher or peer input. |
+| `progress_digests` | `id`, `student_id`, `generated_at`, `reading_level`, `focus_traits`, `strengths`, `next_steps`, `signature_expires_at` | Populated by edge function when a digest is requested. |
 
-## Implementation Phases
-1. **Week 1 – Foundations**
-   - Scaffold SvelteKit project with Supabase auth integration (email magic link + row level security).
-   - Configure GitHub Pages deployment workflow (`svelte-kit sync`, `npm run build`, push to `gh-pages`).
-   - Implement submission form accepting text upload + transcript text area.
-   - Offline-first caching using service workers (PWA manifest).
-2. **Week 2 – Teacher Dashboard**
-   - Class overview table with filters, submission timelines, and streak indicators.
-   - Detail view showing draft preview, transcript, and self-reflection.
-3. **Week 3 – Feedback & Automation**
-   - Inline annotation UI and comment threads.
-   - LanguageTool integration (self-hosted container or Supabase Edge function).
-   - n8n workflow for reminders and weekly summaries.
-4. **Week 4 – Polishing & Docs**
-   - Package student onboarding kit (PDF + scripts) explaining how to use external LLMs safely.
-   - Add teacher analytics exports and privacy controls.
-   - Document backup strategy and manual recovery procedures.
+## Implementation milestones
+1. **Day 1 – Static shell:** Scaffold SvelteKit, configure Supabase client, deploy to GitHub Pages via Actions.
+2. **Day 3 – Auth & submissions:** Enable magic-link auth, build submission form, enforce RLS, and wire uploads to storage buckets.
+3. **Day 5 – Dashboards:** Create student timeline and teacher class overview using Supabase views for streaks and late flags.
+4. **Day 7 – Feedback tools:** Add annotation UI, quick replies, and rubric entry forms backed by `feedback` table mutations.
+5. **Day 10 – LLM digest:** Deploy `progress_digest` function, add “copy digest link” modal, and document safety controls.
 
-## GitHub Pages Deployment Workflow
-1. Enable GitHub Pages on the repository (Settings → Pages → "GitHub Actions").
-2. Add the official [SvelteKit Static Adapter](https://kit.svelte.dev/docs/adapter-static) and configure `paths.base` if hosting on a project subpath.
-3. Create `.github/workflows/deploy.yml` using the [`actions/deploy-pages`](https://github.com/actions/deploy-pages) action:
-   - Install dependencies, run `npm run build`, and upload the `build/` folder as an artifact.
-   - Deploy on pushes to `main` and optionally manual dispatch.
-4. Protect `main` with branch rules so only reviewed changes trigger deployments.
-5. For local preview, use `npm run preview` and verify offline caching before pushing.
-
-## Supabase Setup Checklist
-1. **Project & Auth**
-   - Create a new project in your Supabase account (Region closest to students).
-   - Enable Email magic link authentication; disable phone auth to stay within free tier.
-   - Define RLS policies on `students`, `submissions`, and `feedback` tables (students can read/write their own rows; teachers have elevated role via Supabase Dashboard).
-2. **Database Schema**
-   - Use SQL Editor → "New Query" to run the schema from the Data Model section.
-   - Seed demo data with the Supabase Table Editor for onboarding.
-3. **Storage Buckets**
-   - Create `drafts` and `transcripts` buckets; enable public read only for signed URLs that expire (e.g., 1 hour).
-   - Enforce file size limits using storage policies.
-4. **Edge Functions (Optional)**
-   - Deploy a `submission-intake` function to validate uploads and trigger LanguageTool checks.
-   - Schedule nightly summaries with Supabase Cron or GitHub Actions hitting the function endpoint.
-5. **Local Development**
-   - Pull the Supabase project config via `supabase link` and run `supabase start` for a local replica during development.
-   - Commit `.supabase` configuration safely (without secrets) and load environment variables via `.env.local`.
-
-## Integration Notes
-- Use GitHub Actions secrets for `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and service role keys. Reference them in deployment workflows and serverless scripts.
-- For client-side calls, rely on the anon key and enforce all writes through RLS-protected tables.
-- When exporting analytics to CSV, run a GitHub Action that queries Supabase using the service role key stored as an encrypted secret, then pushes reports to a private teacher-only branch or releases.
-
-## Student Onboarding Kit (Deliverables)
-- **Quick-start guide:** Screenshots showing how to obtain prompts/feedback from popular free LLM portals and copy transcripts.
-- **Local word-count script:** Cross-platform CLI (Python) that calculates word counts and generates a metadata JSON to upload.
-- **Reflection checklist:** Printable PDF + web form reminding students to note what they learned from the LLM.
-- **Ethics module:** Short lesson on evaluating AI feedback critically and avoiding plagiarism.
-
-## Cost Management & Sustainability
-- Limit file uploads (e.g., 2MB) to stay within free storage allowances.
-- Purge raw drafts after 90 days while keeping metrics; encourage students to keep personal archives locally.
-- Rely on static generation so cold starts are rare and serverless invocations stay under free quotas.
-- Encourage community contributions to expand prompt templates and onboarding materials.
-
-## Security & Privacy Considerations
-- Use student-selected pseudonyms; map to real identities offline.
-- Provide consent forms explaining that transcripts from third-party LLMs may include personal data.
-- Encrypt stored files at rest; restrict access to teacher accounts via role-based permissions.
-- Offer data deletion on request and document how to revoke access from Supabase/Firestore.
+## Operational guidelines
+- Protect `main` branch so deployments to GitHub Pages require review.
+- Store Supabase keys as GitHub secrets; client only uses anon key with strict RLS policies.
+- Purge old file uploads after 90 days while retaining digest metadata for longitudinal analysis.
+- Provide students with a PDF onboarding guide explaining how to use digests with different LLMs responsibly.
 
 ## License
 MIT License (to be added) — keeps the project open for educators to adapt.
