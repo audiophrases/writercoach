@@ -3,444 +3,106 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WriterCoach</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <title>WriterCoach — reset in progress</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f6f7fb;
+        color: #0f172a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 16px;
+      }
+
+      .card {
+        max-width: 720px;
+        width: 100%;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+        padding: 32px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        letter-spacing: -0.02em;
+      }
+
+      p {
+        margin: 0 0 14px;
+        line-height: 1.6;
+      }
+
+      ul {
+        margin: 0 0 16px 18px;
+        padding: 0;
+        line-height: 1.6;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #eef2ff;
+        color: #3730a3;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+
+      .tag svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      footer {
+        margin-top: 18px;
+        font-size: 14px;
+        color: #475569;
+      }
+    </style>
   </head>
-  <body data-auth="signed-out">
-    <header class="site-header">
-      <div class="container">
-        <div class="logo">WriterCoach</div>
-        <div class="header-right">
-          <nav class="site-nav">
-            <a href="#overview">Overview</a>
-            <a href="#workflow">Workflow</a>
-            <a href="#progress">Progress views</a>
-            <a href="#digest">LLM digest</a>
-            <a href="#roadmap">Roadmap</a>
-            <a href="#dashboard">Dashboard</a>
-            <a href="#contact">Get involved</a>
-          </nav>
-          <div class="auth-controls">
-            <div class="auth-badge" data-auth-visible="signed-in">
-              Signed in as <span id="auth-email"></span>
-            </div>
-            <button
-              class="button tertiary"
-              type="button"
-              data-action="open-auth"
-              data-auth-visible="signed-out"
-            >
-              Sign in
-            </button>
-            <button
-              class="button tertiary"
-              type="button"
-              id="sign-out-button"
-              data-auth-visible="signed-in"
-            >
-              Sign out
-            </button>
-          </div>
-        </div>
+  <body>
+    <main class="card" aria-labelledby="reset-heading">
+      <div class="tag" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <polyline points="23 20 23 14 17 14"></polyline>
+          <path d="M20.49 9A9 9 0 0 0 6.73 5.15L1 10m22-6-5.73 4.85a9 9 0 0 1-13.76 3.8L1 14"></path>
+        </svg>
+        Reset in progress
       </div>
-    </header>
-
-    <main>
-      <section id="overview" class="hero">
-        <div class="container">
-          <div class="hero-content">
-            <h1>One shared progress hub for writers, teachers, and LLM co-pilots</h1>
-            <p>
-              WriterCoach runs as a static GitHub Pages site backed by Supabase so
-              everyone sees the same growth timeline. Students draft anywhere,
-              teachers respond in minutes, and helper LLMs adapt using secure
-              progress digests.
-            </p>
-            <div class="hero-actions">
-              <a class="button primary" href="#contact">Start exploring</a>
-              <a class="button secondary" href="#workflow">See the workflow</a>
-            </div>
-          </div>
-          <div class="hero-card">
-            <h2>Lean stack, full visibility</h2>
-            <ul>
-              <li>GitHub Pages + Supabase only</li>
-              <li>Shared timelines for teachers &amp; students</li>
-              <li>Signed digests for adaptive LLM feedback</li>
-              <li>Row-level security without extra servers</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section id="dashboard" class="dashboard">
-        <div class="container">
-          <div class="section-heading">
-            <h2>Live Supabase dashboard</h2>
-            <p>
-              Connect to your Supabase project to view assignments, submit drafts, see feedback,
-              and trigger the <code>progress_digest</code> function from the browser.
-            </p>
-          </div>
-
-          <div class="auth-gate card block" data-auth-visible="signed-out" data-display="block">
-            <div class="auth-gate__content">
-              <h3>Sign in to sync your data</h3>
-              <p>Use the magic-link flow to load assignments and start submitting drafts.</p>
-              <button class="button primary" type="button" data-action="open-auth">Send magic link</button>
-            </div>
-            <div class="auth-gate__note">
-              <p><strong>Tip:</strong> Update <code>supabase-config.js</code> with your project URL and anon key.</p>
-            </div>
-          </div>
-
-          <div class="dashboard-grid block" data-auth-visible="signed-in" data-display="block">
-            <article class="card data-card">
-              <header class="data-card__header">
-                <div>
-                  <p class="eyebrow">Assignments</p>
-                  <h3>Upcoming &amp; active</h3>
-                </div>
-                <span class="status-pill" id="assignments-status">Idle</span>
-              </header>
-              <ul class="data-list" id="assignments-list"></ul>
-              <p class="empty-state" id="assignments-empty" hidden>No assignments available yet.</p>
-            </article>
-
-            <article class="card data-card">
-              <header class="data-card__header">
-                <div>
-                  <p class="eyebrow">New submission</p>
-                  <h3>Upload draft &amp; reflection</h3>
-                </div>
-                <span class="status-pill" id="submission-status">Waiting</span>
-              </header>
-              <form id="submission-form" class="stacked-form">
-                <label>
-                  Assignment
-                  <select id="assignment-select" required>
-                    <option value="">Choose an assignment</option>
-                  </select>
-                </label>
-                <label>
-                  Draft file
-                  <input type="file" id="draft-file" accept=".pdf,.doc,.docx,.txt,.md" required />
-                </label>
-                <label>
-                  Conversation transcript (optional)
-                  <input type="file" id="transcript-file" accept=".pdf,.txt,.md,.doc,.docx" />
-                </label>
-                <label>
-                  Reflection
-                  <textarea id="reflection-input" rows="3" placeholder="What did you focus on?"></textarea>
-                </label>
-                <label>
-                  Time spent (minutes)
-                  <input type="number" id="time-input" min="0" step="5" placeholder="45" />
-                </label>
-                <button class="button primary" type="submit">Submit to Supabase</button>
-              </form>
-              <p class="helper-text">
-                Files are stored in the <code>writercoach-submissions</code> bucket with signed URLs.
-              </p>
-            </article>
-          </div>
-
-          <div class="dashboard-grid block" data-auth-visible="signed-in" data-display="block">
-            <article class="card data-card">
-              <header class="data-card__header">
-                <div>
-                  <p class="eyebrow">Submissions</p>
-                  <h3>Latest uploads</h3>
-                </div>
-                <span class="status-pill" id="submissions-status">Idle</span>
-              </header>
-              <ul class="data-list" id="submissions-list"></ul>
-              <p class="empty-state" id="submissions-empty" hidden>No submissions yet.</p>
-            </article>
-
-            <article class="card data-card">
-              <header class="data-card__header">
-                <div>
-                  <p class="eyebrow">Feedback</p>
-                  <h3>Teacher &amp; peer responses</h3>
-                </div>
-                <span class="status-pill" id="feedback-status">Idle</span>
-              </header>
-              <ul class="data-list" id="feedback-list"></ul>
-              <p class="empty-state" id="feedback-empty" hidden>No feedback has been posted yet.</p>
-            </article>
-          </div>
-
-          <div class="dashboard-grid block" data-auth-visible="signed-in" data-display="block">
-            <article class="card data-card wide">
-              <header class="data-card__header">
-                <div>
-                  <p class="eyebrow">LLM digest</p>
-                  <h3>Generate a signed progress link</h3>
-                </div>
-                <span class="status-pill" id="digest-status">Idle</span>
-              </header>
-              <p>
-                The <code>progress_digest</code> Supabase Edge Function condenses recent submissions, goals,
-                and feedback. Use the signed URL to share context with ChatGPT, Claude, or any other LLM.
-              </p>
-              <div class="digest-actions">
-                <button class="button secondary" type="button" id="generate-digest">Generate digest</button>
-                <button class="button tertiary" type="button" id="copy-digest" disabled>Copy link</button>
-              </div>
-              <pre class="digest-output" id="digest-output" aria-live="polite"></pre>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="workflow" class="split-section">
-        <div class="container">
-          <div class="split-content">
-            <h2>Five-step learner workflow</h2>
-            <p>
-              Keep drafting tools flexible while centralizing evidence and
-              feedback. Supabase stores the official record so students, teachers,
-              and LLM co-pilots stay in sync.
-            </p>
-          </div>
-          <div class="split-grid">
-            <article class="card">
-              <h3>Check the brief</h3>
-              <p>
-                Students sign in with Supabase magic links and review the weekly
-                assignment plus prompt starters for their preferred LLM.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Draft anywhere</h3>
-              <p>
-                Learners compose offline, in Docs, or on paper while logging time
-                spent and saving transcripts from any external model.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Upload evidence</h3>
-              <p>
-                Final draft, transcript, and reflection land in Supabase storage
-                with automatic word counts and streak updates.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Review together</h3>
-              <p>
-                Teacher feedback, rubric scores, and audio notes appear instantly
-                in the student timeline inside the GitHub Pages dashboard.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Share with an LLM</h3>
-              <p>
-                Students generate a signed digest link to paste into their LLM so
-                each coaching session starts with accurate context.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="progress" class="timeline">
-        <div class="container">
-          <div class="section-heading">
-            <h2>Shared progress views</h2>
-            <p>
-              Everyone sees the same evidence trail—students, teachers, and
-              guardians if invited.
-            </p>
-          </div>
-          <ol class="timeline-list">
-            <li>
-              <h3>Student timeline</h3>
-              <p>
-                Visualize submissions, reflections, and streaks with toggles for
-                drafts, transcripts, and teacher responses.
-              </p>
-            </li>
-            <li>
-              <h3>Teacher console</h3>
-              <p>
-                Filterable class board highlights late work, target CEFR levels,
-                and open comments across all students.
-              </p>
-            </li>
-            <li>
-              <h3>Progress digest</h3>
-              <p>
-                Generate a Supabase-signed JSON summary so the next LLM session
-                adapts to current strengths and goals.
-              </p>
-            </li>
-          </ol>
-        </div>
-      </section>
-
-      <section id="digest" class="callout">
-        <div class="container">
-          <div class="callout-content">
-            <h2>LLM-ready digest in three safeguards</h2>
-            <p>
-              Give language models just enough context to coach effectively
-              without sharing entire drafts by default.
-            </p>
-          </div>
-          <ol class="callout-list">
-            <li>
-              <strong>Edge function filter:</strong> <code>progress_digest</code>
-              returns goals, recurring issues, and next steps—not raw documents.
-            </li>
-            <li>
-              <strong>Expiring signature:</strong> Copy links expire within an
-              hour and can be revoked instantly from the dashboard.
-            </li>
-            <li>
-              <strong>Student control:</strong> Learners decide which metrics
-              appear in the digest before sharing with an LLM.
-            </li>
-          </ol>
-        </div>
-      </section>
-
-      <section class="callout secondary">
-        <div class="container">
-          <div class="callout-content">
-            <h2>Stack essentials</h2>
-            <p>
-              Everything runs on free tiers—deploy once and invite the class to
-              sign in.
-            </p>
-          </div>
-          <ul class="callout-list bullets">
-            <li>GitHub Pages hosts the static dashboard.</li>
-            <li>Supabase handles auth, database, and storage.</li>
-            <li>Row-level security keeps data scoped per user.</li>
-            <li>GitHub Actions cron pings Supabase for weekly summaries.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="roadmap" class="security">
-        <div class="container">
-          <div class="section-heading">
-            <h2>Ten-day launch roadmap</h2>
-            <p>Deliver the full workflow quickly while keeping privacy intact.</p>
-          </div>
-          <div class="features-grid">
-            <article class="card">
-              <h3>Day 1</h3>
-              <p>Ship the SvelteKit shell to GitHub Pages and wire Supabase auth.</p>
-            </article>
-            <article class="card">
-              <h3>Day 3</h3>
-              <p>Enable submissions, storage uploads, and streak calculations.</p>
-            </article>
-            <article class="card">
-              <h3>Day 5</h3>
-              <p>Build student timelines and teacher class dashboards from views.</p>
-            </article>
-            <article class="card">
-              <h3>Day 7</h3>
-              <p>Add annotation tools, rubric entry, and quick feedback templates.</p>
-            </article>
-            <article class="card">
-              <h3>Day 10</h3>
-              <p>
-                Launch the progress digest edge function and student-facing copy
-                flow.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" class="contact">
-        <div class="container">
-          <div class="contact-card">
-            <h2>Ready to collaborate?</h2>
-            <p>
-              Join educators piloting WriterCoach or contribute to Supabase
-              schemas, UI components, and onboarding resources.
-            </p>
-            <form>
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input id="name" type="text" placeholder="Your name" />
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input id="email" type="email" placeholder="you@example.com" />
-              </div>
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea
-                  id="message"
-                  rows="4"
-                  placeholder="How would you like to help?"
-                ></textarea>
-              </div>
-              <button type="submit" class="button primary">Send interest</button>
-            </form>
-          </div>
-        </div>
-      </section>
+      <h1 id="reset-heading">WriterCoach rebuild kickoff</h1>
+      <p>
+        The previous prototype has been cleared out so we can restart from scratch. The next version
+        will read assignments and progress from a <strong>public CSV</strong> source and route all
+        student submissions into a <strong>Google Spreadsheet</strong> for review.
+      </p>
+      <p>Planned shape of the new flow:</p>
+      <ul>
+        <li>Fetch roster, assignments, and progress snapshots from a published CSV feed.</li>
+        <li>Provide a simple submission form that appends new entries to a shared Google Sheet.</li>
+        <li>Keep everything static and self-contained so it can be hosted from this single page.</li>
+      </ul>
+      <p>
+        You can start wiring the new data sources directly from this file—no other local assets are
+        required yet. Add your CSV URL and Google Sheet endpoint when they are ready.
+      </p>
+      <footer>Baseline styles and content live entirely in <code>index.html</code>.</footer>
     </main>
-
-    <div id="auth-modal" class="auth-modal" aria-hidden="true">
-      <div class="auth-modal__backdrop" data-action="close-auth"></div>
-      <div
-        class="auth-modal__panel"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="auth-modal-title"
-      >
-        <button
-          class="auth-modal__close"
-          type="button"
-          data-action="close-auth"
-          aria-label="Close sign-in form"
-        >&times;</button>
-        <h2 id="auth-modal-title">Sign in with a magic link</h2>
-        <p>Enter your email address and we will send you a secure sign-in link.</p>
-        <form id="magic-link-form" class="auth-form">
-          <div class="form-group">
-            <label for="auth-email-input">Email</label>
-            <input
-              id="auth-email-input"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-          <button class="button primary" type="submit" id="magic-link-submit">
-            Send magic link
-          </button>
-        </form>
-        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
-      </div>
-    </div>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>&copy; <span id="year"></span> WriterCoach. Built for ESL writing growth.</p>
-      </div>
-    </footer>
-
-    <script src="supabase-config.js"></script>
-    <script type="module" src="app.js"></script>
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
   </body>
 </html>
