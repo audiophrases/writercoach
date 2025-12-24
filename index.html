@@ -23,6 +23,7 @@
             <a href="#progress">Progress views</a>
             <a href="#digest">LLM digest</a>
             <a href="#roadmap">Roadmap</a>
+            <a href="#dashboard">Dashboard</a>
             <a href="#contact">Get involved</a>
           </nav>
           <div class="auth-controls">
@@ -74,6 +75,128 @@
               <li>Signed digests for adaptive LLM feedback</li>
               <li>Row-level security without extra servers</li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="dashboard">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Live Supabase dashboard</h2>
+            <p>
+              Connect to your Supabase project to view assignments, submit drafts, see feedback,
+              and trigger the <code>progress_digest</code> function from the browser.
+            </p>
+          </div>
+
+          <div class="auth-gate card block" data-auth-visible="signed-out" data-display="block">
+            <div class="auth-gate__content">
+              <h3>Sign in to sync your data</h3>
+              <p>Use the magic-link flow to load assignments and start submitting drafts.</p>
+              <button class="button primary" type="button" data-action="open-auth">Send magic link</button>
+            </div>
+            <div class="auth-gate__note">
+              <p><strong>Tip:</strong> Update <code>supabase-config.js</code> with your project URL and anon key.</p>
+            </div>
+          </div>
+
+          <div class="dashboard-grid block" data-auth-visible="signed-in" data-display="block">
+            <article class="card data-card">
+              <header class="data-card__header">
+                <div>
+                  <p class="eyebrow">Assignments</p>
+                  <h3>Upcoming &amp; active</h3>
+                </div>
+                <span class="status-pill" id="assignments-status">Idle</span>
+              </header>
+              <ul class="data-list" id="assignments-list"></ul>
+              <p class="empty-state" id="assignments-empty" hidden>No assignments available yet.</p>
+            </article>
+
+            <article class="card data-card">
+              <header class="data-card__header">
+                <div>
+                  <p class="eyebrow">New submission</p>
+                  <h3>Upload draft &amp; reflection</h3>
+                </div>
+                <span class="status-pill" id="submission-status">Waiting</span>
+              </header>
+              <form id="submission-form" class="stacked-form">
+                <label>
+                  Assignment
+                  <select id="assignment-select" required>
+                    <option value="">Choose an assignment</option>
+                  </select>
+                </label>
+                <label>
+                  Draft file
+                  <input type="file" id="draft-file" accept=".pdf,.doc,.docx,.txt,.md" required />
+                </label>
+                <label>
+                  Conversation transcript (optional)
+                  <input type="file" id="transcript-file" accept=".pdf,.txt,.md,.doc,.docx" />
+                </label>
+                <label>
+                  Reflection
+                  <textarea id="reflection-input" rows="3" placeholder="What did you focus on?"></textarea>
+                </label>
+                <label>
+                  Time spent (minutes)
+                  <input type="number" id="time-input" min="0" step="5" placeholder="45" />
+                </label>
+                <button class="button primary" type="submit">Submit to Supabase</button>
+              </form>
+              <p class="helper-text">
+                Files are stored in the <code>writercoach-submissions</code> bucket with signed URLs.
+              </p>
+            </article>
+          </div>
+
+          <div class="dashboard-grid block" data-auth-visible="signed-in" data-display="block">
+            <article class="card data-card">
+              <header class="data-card__header">
+                <div>
+                  <p class="eyebrow">Submissions</p>
+                  <h3>Latest uploads</h3>
+                </div>
+                <span class="status-pill" id="submissions-status">Idle</span>
+              </header>
+              <ul class="data-list" id="submissions-list"></ul>
+              <p class="empty-state" id="submissions-empty" hidden>No submissions yet.</p>
+            </article>
+
+            <article class="card data-card">
+              <header class="data-card__header">
+                <div>
+                  <p class="eyebrow">Feedback</p>
+                  <h3>Teacher &amp; peer responses</h3>
+                </div>
+                <span class="status-pill" id="feedback-status">Idle</span>
+              </header>
+              <ul class="data-list" id="feedback-list"></ul>
+              <p class="empty-state" id="feedback-empty" hidden>No feedback has been posted yet.</p>
+            </article>
+          </div>
+
+          <div class="dashboard-grid block" data-auth-visible="signed-in" data-display="block">
+            <article class="card data-card wide">
+              <header class="data-card__header">
+                <div>
+                  <p class="eyebrow">LLM digest</p>
+                  <h3>Generate a signed progress link</h3>
+                </div>
+                <span class="status-pill" id="digest-status">Idle</span>
+              </header>
+              <p>
+                The <code>progress_digest</code> Supabase Edge Function condenses recent submissions, goals,
+                and feedback. Use the signed URL to share context with ChatGPT, Claude, or any other LLM.
+              </p>
+              <div class="digest-actions">
+                <button class="button secondary" type="button" id="generate-digest">Generate digest</button>
+                <button class="button tertiary" type="button" id="copy-digest" disabled>Copy link</button>
+              </div>
+              <pre class="digest-output" id="digest-output" aria-live="polite"></pre>
+            </article>
           </div>
         </div>
       </section>
