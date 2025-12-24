@@ -42,6 +42,21 @@ WriterCoach is a blueprint for a no-cost ESL writing coach that runs as a static
 | Edge Functions | Supabase Functions | Generate digests, validate uploads, compute reading levels, and sync streak metrics nightly. |
 | Automation | GitHub Actions cron hitting Supabase function | Sends weekly summaries and refreshes analytics without extra services. |
 
+## Setup checklist
+1. **Configure Supabase project settings**
+   - Set the **Site URL** to your GitHub Pages domain in <kbd>Authentication → URL Configuration</kbd>.
+   - Add SMTP credentials or enable the built-in development email provider in <kbd>Authentication → Email</kbd> so magic links can send.
+   - Create the storage bucket `writercoach-submissions` (private) for draft uploads.
+2. **Apply the database schema**
+   - Run [`supabase/schema.sql`](supabase/schema.sql) in the SQL editor to create tables, RLS policies, and storage policies.
+   - Deploy the `progress_digest` Edge Function to return a signed URL plus digest payload for a given `student_id` or `submission_id`.
+3. **Wire the client**
+   - Copy `supabase-config.example.js` to `supabase-config.js` and fill in `supabaseUrl`, `supabaseAnonKey`, and (optionally) override `storageBucket`.
+   - Confirm `index.html` loads `supabase-config.js` *before* `app.js` so `createClient` receives your keys.
+4. **Verify auth**
+   - Open the dashboard, submit your email in the modal, and confirm the magic-link email arrives.
+   - After signing in, ensure assignments, submissions, feedback, and digest calls return data from your Supabase project.
+
 ## Data model essentials
 | Table | Key fields | Notes |
 | --- | --- | --- |
