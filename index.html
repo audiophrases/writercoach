@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WriterCoach — reset in progress</title>
+    <title>WriterCoach — sign-in gated prototype</title>
     <style>
       :root {
         color-scheme: light;
@@ -26,7 +26,7 @@
       }
 
       .card {
-        max-width: 720px;
+        max-width: 960px;
         width: 100%;
         background: #fff;
         border-radius: 18px;
@@ -69,10 +69,123 @@
         height: 16px;
       }
 
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 16px;
+      }
+
+      .panel {
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 18px;
+        background: #f8fafc;
+      }
+
+      .panel h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+        letter-spacing: -0.01em;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .pill.active {
+        background: #ecfdf3;
+        color: #166534;
+      }
+
+      .pill.inactive {
+        background: #fef2f2;
+        color: #991b1b;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      input,
+      textarea,
+      button {
+        font: inherit;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #cbd5e1;
+        background: #fff;
+      }
+
+      textarea {
+        min-height: 90px;
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .row > * {
+        flex: 1;
+      }
+
+      button {
+        border: none;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        background: #4338ca;
+        color: #fff;
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+
+      button.secondary {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+
+      button:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 18px rgba(67, 56, 202, 0.2);
+      }
+
+      .status {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #334155;
+      }
+
       footer {
         margin-top: 18px;
         font-size: 14px;
         color: #475569;
+      }
+
+      @media (max-width: 820px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -84,25 +197,201 @@
           <polyline points="23 20 23 14 17 14"></polyline>
           <path d="M20.49 9A9 9 0 0 0 6.73 5.15L1 10m22-6-5.73 4.85a9 9 0 0 1-13.76 3.8L1 14"></path>
         </svg>
-        Reset in progress
+        Sign-in required
       </div>
-      <h1 id="reset-heading">WriterCoach rebuild kickoff</h1>
+      <h1 id="reset-heading">WriterCoach gated prototype</h1>
       <p>
-        The previous prototype has been cleared out so we can restart from scratch. The next version
-        will read assignments and progress from a <strong>public CSV</strong> source and route all
-        student submissions into a <strong>Google Spreadsheet</strong> for review.
+        This page demonstrates the simplest, mostly-free setup to require Google sign-in. Use the
+        Google Identity Services button below, then send the ID token to a Google Apps Script web app
+        that appends submissions to a Google Sheet.
       </p>
-      <p>Planned shape of the new flow:</p>
-      <ul>
-        <li>Fetch roster, assignments, and progress snapshots from a published CSV feed.</li>
-        <li>Provide a simple submission form that appends new entries to a shared Google Sheet.</li>
-        <li>Keep everything static and self-contained so it can be hosted from this single page.</li>
-      </ul>
-      <p>
-        You can start wiring the new data sources directly from this file—no other local assets are
-        required yet. Add your CSV URL and Google Sheet endpoint when they are ready.
-      </p>
-      <footer>Baseline styles and content live entirely in <code>index.html</code>.</footer>
+      <div class="grid">
+        <section class="panel" aria-labelledby="auth-heading">
+          <div class="row" style="align-items: center; justify-content: space-between">
+            <div>
+              <p class="pill active" id="auth-pill" aria-live="polite">Signed out</p>
+              <h2 id="auth-heading">Google sign-in</h2>
+              <p>
+                Replace <code>YOUR_GOOGLE_CLIENT_ID</code> with your OAuth client ID. This uses Google
+                Identity Services (free) to retrieve an ID token, then gates all actions on that token.
+              </p>
+            </div>
+            <button class="secondary" id="signout-button" type="button" disabled>Sign out</button>
+          </div>
+          <div id="gsi-button-container" aria-live="polite"></div>
+          <div class="status" id="auth-status"></div>
+        </section>
+        <section class="panel" aria-labelledby="submission-heading">
+          <p class="pill inactive" id="submission-pill" aria-live="polite">Locked</p>
+          <h2 id="submission-heading">Submit to Google Sheet</h2>
+          <p>
+            Point <code>APPS_SCRIPT_WEB_APP_URL</code> to a published Apps Script that validates the ID
+            token server-side via <code>Session.getActiveUser()</code> and appends to the sheet.
+          </p>
+          <form id="submission-form">
+            <div class="row">
+              <div>
+                <label for="student-name">Student name</label>
+                <input id="student-name" name="studentName" placeholder="Jane Doe" required />
+              </div>
+              <div>
+                <label for="assignment">Assignment</label>
+                <input id="assignment" name="assignment" placeholder="Essay #1" required />
+              </div>
+            </div>
+            <label for="submission-link">Submission link</label>
+            <input id="submission-link" name="submissionLink" type="url" placeholder="https://docs.google.com/..." required />
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" placeholder="Optional notes for reviewers"></textarea>
+            <button id="submit-button" type="submit" disabled>Submit to Sheet</button>
+            <div class="status" id="submission-status" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+      </div>
+      <footer>
+        Baseline styles and content live entirely in <code>index.html</code>. Update the placeholders
+        to wire your own OAuth client ID and Apps Script URL.
+      </footer>
     </main>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      // === Replace these placeholders with your production values ===
+      const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID";
+      const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+      // ==============================================================
+
+      const authPill = document.getElementById("auth-pill");
+      const authStatus = document.getElementById("auth-status");
+      const submissionPill = document.getElementById("submission-pill");
+      const submitButton = document.getElementById("submit-button");
+      const signoutButton = document.getElementById("signout-button");
+      const submissionStatus = document.getElementById("submission-status");
+      const form = document.getElementById("submission-form");
+      const gsiContainer = document.getElementById("gsi-button-container");
+
+      let latestIdToken = null;
+      let googlePrompt;
+
+      function setSignedIn(email) {
+        latestIdToken = email ? latestIdToken : null;
+        authPill.textContent = email ? `Signed in as ${email}` : "Signed out";
+        authPill.className = `pill ${email ? "active" : "inactive"}`;
+        submissionPill.textContent = email ? "Ready" : "Locked";
+        submissionPill.className = `pill ${email ? "active" : "inactive"}`;
+        submitButton.disabled = !email;
+        signoutButton.disabled = !email;
+        authStatus.textContent = email
+          ? "Authenticated. All submissions will include your ID token for server-side verification."
+          : "Sign in with Google to unlock submissions.";
+      }
+
+      function handleCredentialResponse(response) {
+        latestIdToken = response.credential;
+        const payload = parseJwt(latestIdToken);
+        const email = payload?.email || "Google account";
+        setSignedIn(email);
+        submissionStatus.textContent = "";
+      }
+
+      function parseJwt(token) {
+        try {
+          const base64Url = token.split(".")[1];
+          const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+          const jsonPayload = decodeURIComponent(
+            atob(base64)
+              .split("")
+              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+              .join("")
+          );
+          return JSON.parse(jsonPayload);
+        } catch (err) {
+          console.warn("Unable to parse token", err);
+          return null;
+        }
+      }
+
+      function initGsi() {
+        if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === "YOUR_GOOGLE_CLIENT_ID") {
+          authStatus.textContent =
+            "Set GOOGLE_CLIENT_ID to your OAuth client ID to enable the Google Sign-In button.";
+          return;
+        }
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredentialResponse,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+        googlePrompt = google.accounts.id.prompt;
+        google.accounts.id.renderButton(gsiContainer, {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          shape: "pill",
+          text: "continue_with",
+        });
+        authStatus.textContent = "Use the Google button above to sign in.";
+      }
+
+      function signOut() {
+        latestIdToken = null;
+        setSignedIn(null);
+        submissionStatus.textContent = "";
+        google.accounts.id.revoke(undefined, () => {
+          authStatus.textContent = "Signed out. Refresh the page or sign in again.";
+        });
+      }
+
+      async function submitForm(event) {
+        event.preventDefault();
+        if (!latestIdToken) {
+          submissionStatus.textContent = "Please sign in first.";
+          return;
+        }
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+        submitButton.disabled = true;
+        submissionStatus.textContent = "Sending to Google Apps Script…";
+
+        try {
+          const response = await fetch(APPS_SCRIPT_WEB_APP_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${latestIdToken}`,
+            },
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          submissionStatus.textContent = "Submitted! Check the Google Sheet for your entry.";
+          form.reset();
+        } catch (err) {
+          submissionStatus.textContent =
+            "Submission failed. Confirm the Apps Script URL and that the web app allows Google-signed users.";
+          console.error(err);
+        } finally {
+          submitButton.disabled = !latestIdToken;
+        }
+      }
+
+      window.onload = () => {
+        setSignedIn(null);
+        signoutButton.addEventListener("click", signOut);
+        form.addEventListener("submit", submitForm);
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+          initGsi();
+        } else {
+          const interval = setInterval(() => {
+            if (window.google && window.google.accounts && window.google.accounts.id) {
+              clearInterval(interval);
+              initGsi();
+            }
+          }, 200);
+          setTimeout(() => clearInterval(interval), 5000);
+        }
+      };
+    </script>
   </body>
 </html>
