@@ -253,8 +253,8 @@
               <p class="pill active" id="auth-pill" aria-live="polite">Signed out</p>
               <h2 id="auth-heading">Google sign-in</h2>
               <p>
-                Replace <code>YOUR_GOOGLE_CLIENT_ID</code> with your OAuth client ID. This uses Google
-                Identity Services (free) to retrieve an ID token, then gates all actions on that token.
+                Google Identity Services (free) retrieves an ID token and gates all actions on that token.
+                This prototype is preconfigured with the provided OAuth client ID below.
               </p>
             </div>
             <button class="secondary" id="signout-button" type="button" disabled>Sign out</button>
@@ -311,13 +311,13 @@
       </div>
       <footer>
         Baseline styles and content live entirely in <code>index.html</code>. Update the placeholders
-        to wire your own OAuth client ID and Apps Script URL.
+        to wire your own Apps Script URL and sheet endpoints.
       </footer>
     </main>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
       // === Replace these placeholders with your production values ===
-      const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID";
+      const GOOGLE_CLIENT_ID = "740410768405-kbug08htkpqo7p6sf04279edr88qgdpe.apps.googleusercontent.com";
       const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
       const PUBLIC_SHEET_CSV_URL =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBXShyfojRs54aG5BT2mSZlT_81IlTJ4wsX1-wLdHf8H1mdDb6HVVMX2MIzYF8LR_GAqnX24jw5Qyw/pub?gid=0&single=true&output=csv";
@@ -390,9 +390,8 @@
       }
 
       function initGsi() {
-        if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === "YOUR_GOOGLE_CLIENT_ID") {
-          authStatus.textContent =
-            "Set GOOGLE_CLIENT_ID to your OAuth client ID to enable the Google Sign-In button.";
+        if (!GOOGLE_CLIENT_ID) {
+          authStatus.textContent = "Set GOOGLE_CLIENT_ID to your OAuth client ID to enable the Google Sign-In button.";
           return;
         }
         google.accounts.id.initialize({
